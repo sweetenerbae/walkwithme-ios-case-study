@@ -1,0 +1,7 @@
+.DS_Store
+assets/*.mov
+assets/*.mp4
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+.env
+Secrets.xcconfig
