@@ -1,99 +1,116 @@
-# Walk With Me: Daily Walks
+<p align="center">
+  <img src="assets/IMG_8628.PNG" alt="Walk With Me home screen" width="210" />
+</p>
 
-> An iOS social walking app for people who want to walk together from different places.
+<h1 align="center">Walk With Me</h1>
 
-`Walk With Me` pairs two people in a shared walking session, displays steps and distance in near real time, and turns finished walks into a lightweight shared history.
+<p align="center">
+  <strong>Daily walks feel more motivating when someone is walking with you — even from somewhere else.</strong>
+</p>
 
-The production repository is private. This case study documents the product decisions, architecture, and selected implementation samples without exposing credentials, production infrastructure, or user data.
+<p align="center">
+  <a href="README.md">English</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="README.ru.md">Русский</a>
+</p>
 
-## Highlights
+<p align="center">
+  <img src="https://img.shields.io/badge/iOS-17%2B-000000?logo=apple&logoColor=white" alt="iOS 17+" />
+  <img src="https://img.shields.io/badge/UI-SwiftUI-58A6FF" alt="SwiftUI" />
+  <img src="https://img.shields.io/badge/Backend-Supabase-3ECF8E?logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/badge/Distribution-TestFlight-0D96F6?logo=apple&logoColor=white" alt="TestFlight" />
+</p>
 
-- SwiftUI application using MVVM and feature-oriented organization
-- Supabase Auth, Postgres, Realtime, Storage, and Edge Functions
-- Friend invitations by username and anonymous random walks
-- Live step and distance updates with Core Motion and Core Location fallback
-- Recovery of walk progress after backgrounding or reopening the app
-- Profile history, walking identity, avatars, localization, and privacy controls
-- TestFlight distribution and release hardening
+`Walk With Me` is an iOS social walking app for two people who want to share a walk remotely. It pairs walkers in a live session, synchronises steps and distance, and preserves completed walks as a small shared history.
 
-## Product Problem
+> The production source repository is private. This public case study shares the product, system design, and selected visuals without credentials, user data, or production infrastructure details.
 
-Walking can be more motivating when it feels shared, even when two people are not in the same place. The app focuses on a small ritual: start a walk with a friend, see each other's progress, then keep the result as a shared memory.
+## The Product
 
-## Core Flows
+Walking alone is easy to postpone. Walking "together" creates a gentle commitment: invite a person, start when both are ready, follow each other's progress, and keep the result as a shared moment.
 
-### Invite a walker
+| Invite a friend | Find a random partner | Keep the memory |
+| --- | --- | --- |
+| Send an in-app invite by username or pick a recent walker. | Match anonymously without turning a random walk into a social connection. | See personal stats, shared walks, distance, and completed-session history. |
 
-1. Search for a person by username.
-2. Create an in-app invitation.
-3. The invited person accepts or declines from the home screen.
-4. Both people enter an active session and see progress updates.
+## Visual Story
 
-### Random walk
+<p align="center">
+  <img src="assets/IMG_8628.PNG" alt="Home screen" width="220" />
+  <img src="assets/IMG_8638.PNG" alt="Invite a walker by username or from recents" width="220" />
+  <img src="assets/IMG_8639.PNG" alt="Waiting for invited walker to join" width="220" />
+</p>
 
-1. A user joins the first available random session or creates a waiting one.
-2. The partner remains anonymous.
-3. Random sessions do not create relationship history or expose the partner's identity.
+<p align="center"><sub>Start a walk · invite a person · wait for a second participant</sub></p>
 
-### Finish a walk
+<p align="center">
+  <img src="assets/IMG_8642.PNG" alt="Live shared walk progress" width="220" />
+  <img src="assets/IMG_8641.PNG" alt="Walker profile with shared statistics" width="220" />
+  <img src="assets/IMG_8629.PNG" alt="Personal profile and walking history" width="220" />
+</p>
 
-1. The app flushes the latest local progress.
-2. The session becomes `ended`.
-3. The backend recomputes public walking state.
-4. Both profiles receive an end-of-walk summary and the walk appears in history.
+<p align="center"><sub>Walk in real time · see a walking identity · build shared history</sub></p>
 
-## Architecture
+## What I Built
+
+- Friend sessions: search by username, invite, accept or decline, and reconnect from recent walkers.
+- Anonymous random sessions: no partner identity and no shared relationship history.
+- Live progress: `CMPedometer` steps plus `Core Location` distance, synchronised through Supabase Realtime.
+- Resilient session lifecycle: waiting, active, ended, expired, recovery after foregrounding, and server-side repair of stale public status.
+- Profiles: avatar, walking identity badge, personal statistics, recent activity, and shared stats with a particular walker.
+- Privacy controls: last-walk visibility and optional city sharing for random walks.
+- Product polish: multilingual UI (`ru` / `en`), thoughtful empty states, invite feedback, end-of-walk summary, image cropping, and cache management.
+
+## Engineering Focus
+
+The hard part of this product is not drawing the screens; it is keeping two devices in agreement while either app can be backgrounded, restarted, or lose connectivity.
 
 ```text
-SwiftUI Views
-    |
-ViewModels (@MainActor)
-    |
-Repository / Services
-    |
-Supabase: Auth + Postgres + Realtime + Storage
+CMPedometer / CLLocation
+          ↓
+WalkingViewModel (@MainActor)
+          ↓  debounced, single-flight uploads
+Supabase Postgres ─── Realtime ─── both devices update
+          ↓
+database rules repair public walking state
 ```
 
-The project is organized around `Core`, `Data`, `Domain`, and `Presentation`, with feature folders inside the presentation layer. More detail: [architecture/overview.md](architecture/overview.md).
+- `walk_sessions` is the server source of truth for session state and progress.
+- Progress updates are debounced and single-flight to prevent competing writes.
+- On return to the app, local counters reconcile with server progress instead of resetting.
+- A database trigger derives `profiles.is_walking_now` from active sessions, so one device failing to finish cleanly does not leave a permanent “Walking now” state.
+- Random sessions are explicitly marked and excluded from relationship statistics.
 
-## Reliability Work
-
-- Single-flight, debounced progress uploads prevent overlapping writes during live tracking.
-- Session recovery uses server-stored progress as a baseline after an app restart.
-- Walking status is derived and repaired server-side from session state to avoid stale `Walking now` badges.
-- Async location updates verify the active session and user before changing UI state.
-- Avatar, profile, history, and invite caches reduce unnecessary network requests while keeping network refresh paths explicit.
-
-## Screens
-
-Screenshots will be added here.
-
-| Home | Active Walk | Profile | Invite |
-| --- | --- | --- | --- |
-| `assets/home.png` | `assets/active-walk.png` | `assets/profile.png` | `assets/invite.png` |
+More detail: [architecture overview](architecture/overview.md).
 
 ## Stack
 
-- SwiftUI
-- Swift Concurrency and Combine
-- MVVM
-- Supabase Auth, Postgres, Realtime, Storage, and Edge Functions
-- Core Motion (`CMPedometer`)
-- Core Location (`CLLocationManager`, `CLGeocoder`)
-- UserDefaults and disk-backed caches
-- Russian and English localization
+| Area | Technology |
+| --- | --- |
+| App | Swift, SwiftUI, MVVM, Swift Concurrency, Combine |
+| Realtime backend | Supabase Auth, Postgres, Realtime, Storage, Edge Functions |
+| Motion and place | `CMPedometer`, `CLLocationManager`, `CLGeocoder` |
+| Local performance | `UserDefaults`, disk-backed history cache, avatar cache |
+| Quality and delivery | RLS policies, TestFlight distribution, crash investigation and release hardening |
 
-## Selected Samples
+## Project Structure
 
-The `code-samples` directory is reserved for sanitized, standalone samples from the project. No production keys, user records, or Supabase project details are included.
+```text
+Core/           theme, DI, localisation, formatting, cache policy
+Data/           Supabase repositories and platform services
+Domain/         profiles, sessions, invites, history and analytics models
+Presentation/   SwiftUI features, reusable views and view models
+supabase/       schema, RLS policies, triggers and backend setup
+```
 
-## Privacy and Security
+## Privacy
 
-- Credentials and environment configuration are not included in this repository.
-- The production app stores only the data needed for the account, sessions, progress, and optional avatar.
-- Random walking sessions are designed to remain anonymous in relationship history.
+- No credentials, API keys, backend URLs, or user records are published here.
+- Random walks stay anonymous and do not become part of "walked together" profile history.
+- Public last-walk time and random-walk city are controlled by the walker.
 
 ## Status
 
-The app is in active product development and distributed through TestFlight.
+The app is actively developed and distributed through TestFlight.
 
+---
+
+<p align="center"><sub>Designed and built as an independent iOS product case study.</sub></p>
