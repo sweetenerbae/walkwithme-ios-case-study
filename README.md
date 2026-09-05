@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/IMG_8628.PNG" alt="Walk With Me home screen" width="210" />
+  <img src="assets/app-icon.jpg" alt="Walk With Me app icon" width="112" style="border-radius: 24px;" />
 </p>
 
 <h1 align="center">Walk With Me</h1>
@@ -21,6 +21,10 @@
 
 `Walk With Me` is an iOS social walking app for two people who want to share a walk remotely. It pairs walkers in a live session, synchronises steps and distance, and preserves completed walks as a small shared history.
 
+<p align="center">
+  <img src="assets/IMG_8628.PNG" alt="Walk With Me home screen" width="250" />
+</p>
+
 > The production source repository is private. This public case study shares the product, system design, and selected visuals without credentials, user data, or production infrastructure details.
 
 ## The Product
@@ -34,12 +38,11 @@ Walking alone is easy to postpone. Walking "together" creates a gentle commitmen
 ## Visual Story
 
 <p align="center">
-  <img src="assets/IMG_8628.PNG" alt="Home screen" width="220" />
   <img src="assets/IMG_8638.PNG" alt="Invite a walker by username or from recents" width="220" />
   <img src="assets/IMG_8639.PNG" alt="Waiting for invited walker to join" width="220" />
 </p>
 
-<p align="center"><sub>Start a walk · invite a person · wait for a second participant</sub></p>
+<p align="center"><sub>Invite a person · wait for a second participant</sub></p>
 
 <p align="center">
   <img src="assets/IMG_8642.PNG" alt="Live shared walk progress" width="220" />

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/IMG_8628.PNG" alt="Главный экран Walk With Me" width="210" />
+  <img src="assets/app-icon.jpg" alt="Иконка приложения Walk With Me" width="112" style="border-radius: 24px;" />
 </p>
 
 <h1 align="center">Walk With Me</h1>
@@ -21,6 +21,10 @@
 
 `Walk With Me` — iOS-приложение для совместных прогулок на расстоянии. Оно соединяет двух людей в одной сессии, синхронизирует шаги и дистанцию почти в реальном времени и сохраняет завершённые прогулки как общую историю.
 
+<p align="center">
+  <img src="assets/IMG_8628.PNG" alt="Главный экран Walk With Me" width="250" />
+</p>
+
 > Основной репозиторий приложения приватный. Здесь — продуктовый кейс, устройство системы и избранные экраны без ключей, пользовательских данных и деталей production-инфраструктуры.
 
 ## Идея
@@ -34,12 +38,11 @@
 ## Как Выглядит Flow
 
 <p align="center">
-  <img src="assets/IMG_8628.PNG" alt="Главный экран" width="220" />
   <img src="assets/IMG_8638.PNG" alt="Приглашение вокера по username или из недавних" width="220" />
   <img src="assets/IMG_8639.PNG" alt="Ожидание подключения второго участника" width="220" />
 </p>
 
-<p align="center"><sub>Начать прогулку · позвать человека · дождаться подключения</sub></p>
+<p align="center"><sub>Позвать человека · дождаться подключения</sub></p>
 
 <p align="center">
   <img src="assets/IMG_8642.PNG" alt="Совместная прогулка в реальном времени" width="220" />
