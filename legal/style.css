@@ -1,0 +1,28 @@
+:root { color-scheme: light; --paper: #f6f5f1; --ink: #20221f; --muted: #61665e; --rule: #d8ddd2; --accent: #365b3a; }
+* { box-sizing: border-box; }
+html { scroll-padding-top: 24px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.75 'Avenir Next', 'Trebuchet MS', sans-serif; }
+header, footer { max-width: 1080px; margin: auto; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+header { border-bottom: 1px solid var(--rule); }
+.brand { display: flex; align-items: center; gap: 14px; color: var(--ink); font-weight: 700; text-decoration: none; white-space: nowrap; }
+.brand img { border-radius: 12px; }
+nav { display: flex; gap: 24px; flex-wrap: wrap; font-size: 15px; }
+a { color: var(--accent); text-underline-offset: 4px; overflow-wrap: anywhere; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+main { max-width: 800px; margin: auto; padding: 64px 32px 56px; }
+h1 { font-family: Georgia, serif; font-size: clamp(34px, 6vw, 54px); font-weight: 400; line-height: 1.12; letter-spacing: -1px; margin: 16px 0 24px; overflow-wrap: anywhere; }
+h2 { font-size: 23px; line-height: 1.4; margin: 0 0 18px; }
+p { margin: 0 0 18px; }
+.eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: 2px; font-size: 13px; font-weight: 700; }
+.date { color: var(--muted); font-size: 15px; }
+section { border-top: 1px solid var(--rule); padding-top: 30px; margin-top: 38px; }
+.contents { margin: 30px 0 42px; padding: 18px 22px; background: #eaf0e5; border-radius: 12px; }
+summary { cursor: pointer; font-weight: 600; }
+.contents a { display: block; padding-top: 12px; }
+.resources { border-top: 1px solid var(--rule); padding-top: 30px; margin-top: 40px; display: flex; flex-wrap: wrap; gap: 12px 24px; font-size: 15px; }
+footer { border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; flex-wrap: wrap; }
+.skip { position: absolute; top: -100px; left: 16px; background: white; padding: 10px; }
+.skip:focus { top: 10px; }
+@media (max-width: 600px) { header { align-items: flex-start; flex-direction: column; padding: 22px; } main { padding: 36px 22px; } nav { gap: 14px; } footer { padding: 22px; } }
+@media print { body { background: white; } header, footer, .contents, .skip { display: none; } main { max-width: none; padding: 0; } h2 { break-after: avoid; } }
